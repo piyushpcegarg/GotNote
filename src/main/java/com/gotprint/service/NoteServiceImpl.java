@@ -98,4 +98,31 @@ public class NoteServiceImpl implements NoteService {
 		noteRepository.save(note);
 	}
 	
+	/**
+	 * This method take user details (userId) from the user and delete all notes of user in the database
+	 * userId is primary key of user_mst table
+	 * User can delete notes related to him
+	 * @param noteDto
+	 */
+	
+	public void deleteAllNotes(NoteDto noteDto) {
+		// Create new UserMst object to set userId in UserMst object
+		UserMst userMst = new UserMst(noteDto.getUserId());
+		noteRepository.deleteByUserMst(userMst);
+	}
+	
+	/**
+	 * This method take note details (noteId and userId) from the user and delete appropriate note in the database
+	 * noteId is primary key of note table
+	 * userId is primary key of user_mst table
+	 * User can delete notes related to him
+	 * @param noteDto
+	 */
+	
+	public void deleteNote(NoteDto noteDto) {
+		// Create new UserMst object to set userId in UserMst object
+		UserMst userMst = new UserMst(noteDto.getUserId());
+		noteRepository.deleteByUserMstAndNoteId(userMst, noteDto.getNoteId());
+	}
+	
 }

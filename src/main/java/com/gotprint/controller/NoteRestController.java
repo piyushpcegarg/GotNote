@@ -104,6 +104,37 @@ public class NoteRestController {
    }
    
    /**
+    * This method takes noteId from user and delete associated note with him
+    * @param noteId
+    * @return
+    */
+   
+   @RequestMapping(value = "/note/{noteId}", method = RequestMethod.DELETE)
+   public ResponseEntity<NoteDto> deleteNote(@PathVariable("noteId") long noteId) {
+	   NoteDto noteDto = getNoteDtoInstance();
+	   noteDto.setNoteId(noteId);
+	   noteDto = noteService.getNoteByNoteId(noteDto);
+       if (noteDto == null) {
+           return new ResponseEntity<NoteDto>(HttpStatus.NOT_FOUND);
+       } else {
+    	   noteService.deleteNote(noteDto);
+       }
+       return new ResponseEntity<NoteDto>(HttpStatus.NO_CONTENT);
+   }
+   
+   
+   /**
+    * This method deletes all notes associated with authenticated user
+    * @return
+    */
+   @RequestMapping(value = "/note/", method = RequestMethod.DELETE)
+   public ResponseEntity<NoteDto> deleteAllNotes() {
+	   NoteDto noteDto = getNoteDtoInstance();
+	   noteService.deleteAllNotes(noteDto);
+       return new ResponseEntity<NoteDto>(HttpStatus.NO_CONTENT);
+   }
+   
+   /**
     * This method fetches authenticated user information and set userId in NoteDto
     * @return NoteDto
     */

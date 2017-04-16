@@ -20,5 +20,9 @@ public interface NoteService {
 	public NoteDto saveNote(NoteDto noteDto);
 	
 	public void updateNote(NoteDto noteDto);
+	
+	public void deleteAllNotes(NoteDto noteDto);
+	
+	public void deleteNote(NoteDto noteDto);
 
 }
