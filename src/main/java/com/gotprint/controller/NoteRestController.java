@@ -63,6 +63,47 @@ public class NoteRestController {
    
    
    /**
+    * This method takes note title and note description from user and save in database.
+    * @param noteDto
+    * @param ucBuilder
+    * @return
+    */
+   
+   @RequestMapping(value = "/note/", method = RequestMethod.POST)
+   public ResponseEntity<Void> createNote(@RequestBody NoteDto noteDto, UriComponentsBuilder ucBuilder) {
+ 
+	   NoteDto newNoteDto = getNoteDtoInstance();
+	   newNoteDto.setNoteTitle(noteDto.getNoteTitle());
+	   newNoteDto.setNoteDescription(noteDto.getNoteDescription());
+       noteDto = noteService.saveNote(newNoteDto);
+ 
+       HttpHeaders headers = new HttpHeaders();
+       headers.setLocation(ucBuilder.path("/note/{noteId}").buildAndExpand(noteDto.getNoteId()).toUri());
+       return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+   }
+   
+   /**
+    * This method takes noteId , note title and note description from user and update existing note
+    * @param noteId
+    * @param noteDto
+    * @return
+    */
+   @RequestMapping(value = "/note/{noteId}", method = RequestMethod.PUT)
+   public ResponseEntity<NoteDto> updateNote(@PathVariable("noteId") long noteId, @RequestBody NoteDto noteDto) {
+       NoteDto currentNoteDto = getNoteDtoInstance();
+       currentNoteDto.setNoteId(noteId);
+       currentNoteDto = noteService.getNoteByNoteId(currentNoteDto);
+       if (currentNoteDto == null) {
+           return new ResponseEntity<NoteDto>(HttpStatus.NOT_FOUND);
+       }
+ 
+       currentNoteDto.setNoteTitle(noteDto.getNoteTitle());
+       currentNoteDto.setNoteDescription(noteDto.getNoteDescription());
+       noteService.updateNote(currentNoteDto);
+       return new ResponseEntity<NoteDto>(currentNoteDto, HttpStatus.OK);
+   }
+   
+   /**
     * This method fetches authenticated user information and set userId in NoteDto
     * @return NoteDto
     */

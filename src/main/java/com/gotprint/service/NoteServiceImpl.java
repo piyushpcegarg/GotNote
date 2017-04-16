@@ -60,4 +60,42 @@ public class NoteServiceImpl implements NoteService {
 		return noteDto;
 	}
 	
+	/**
+	 * This method take note details from the user and saves in the database
+	 * noteId which is primary key of note table is generated with the help of sequence
+	 * @param noteDto
+	 */
+	
+	public NoteDto saveNote(NoteDto noteDto) {
+		Note note = new Note();
+		BeanUtils.copyProperties(noteDto, note);
+		// Create new UserMst object to set userId in UserMst object
+		UserMst userMst = new UserMst(noteDto.getUserId());
+		note.setUserMst(userMst);
+		note.setCreationTime(new Date());
+		
+		note = noteRepository.save(note);
+		BeanUtils.copyProperties(note, noteDto);
+		return noteDto;
+	}
+	
+	/**
+	 * This method take note details from the user and update in the database
+	 * noteId which is primary key of note table is generated with the help of sequence
+	 * @param noteDto
+	 */
+	
+	public void updateNote(NoteDto noteDto) {
+		// Create new UserMst object to set userId in UserMst object
+		UserMst userMst = new UserMst(noteDto.getUserId());
+		// fetch existing note from userId and noteId
+		Note note = noteRepository.findByUserMstAndNoteId(userMst, noteDto.getNoteId());
+		// copy updated values
+		BeanUtils.copyProperties(noteDto, note);
+		// set updation time
+		note.setLastUpdateTime(new Date());
+		
+		noteRepository.save(note);
+	}
+	
 }

@@ -16,5 +16,9 @@ public interface NoteService {
 	public List<NoteDto> getAllNotes(NoteDto noteDto);
 	
 	public NoteDto getNoteByNoteId(NoteDto noteDto);
+	
+	public NoteDto saveNote(NoteDto noteDto);
+	
+	public void updateNote(NoteDto noteDto);
 
 }
